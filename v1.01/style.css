@@ -1,0 +1,11 @@
+#gridContainer{
+	display: grid;
+	background-color: blue;
+	padding: 10px;
+}
+.gridBox{
+	/*position: absolute;*/
+	color: #eeeeff;
+	background-color: red;
+	padding: 10px;
+}
