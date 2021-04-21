@@ -58,9 +58,6 @@ function getGrid(){
 	return grid
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 function arraysEqual(a, b) {
 	if (a === b) return true;
 	if (a == null || b == null) return false;
@@ -156,8 +153,18 @@ function checkBoard(board){
 	return true
 }
 
-function branch(){
 
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+// Usage!
+sleep(500).then(() => {
+    // Do something after the sleep!
+});
+
+function branch(board, output, delay){
+	output(board);
 }
 
 function solve(){
@@ -170,3 +177,9 @@ function solve(){
 }
 
 createGrid()
+
+// blocking
+function sleepFor( sleepDuration ){
+	var now = new Date().getTime();
+	while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
+}
