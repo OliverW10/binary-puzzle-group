@@ -17,7 +17,7 @@ function createGrid(){
 	for(var i = 0; i < 36; i += 1){
 		p = document.createElement("a");
 		p.innerHTML = "_"
-		p.className = "gridBoxText"
+		p.className = "gridBoxText noselect"
 		el = document.createElement("div");
 		el.className = "gridBox"
 		el.onclick = toggleGridSquare
