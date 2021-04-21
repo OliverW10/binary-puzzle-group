@@ -135,12 +135,8 @@ function checkBoard(board){
 	}
 
 	// Only check for uniqueness if the board is full
-	for(var i = 0; i < 6; i += 1){
-		for (var j = 0; j < 6; j += 1){
-			if(board[i][j] == -1){
-				return true
-			}
-		}
+	if(findEmpty(board) !== false){
+		return true
 	}
 	// Make sure every row and colomn is unique
 	getCol = (myArray, n) => myArray.map(function(x){ return x[n] });
