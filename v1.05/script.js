@@ -77,6 +77,21 @@ function arraysEqual(a, b) {
 	return true;
 }
 
+function findEmpty(board){
+	/*
+	finds the first grid with a -1
+	searches from left to right top to bottom
+	*/
+	for(var i = 0; i < 6; i += 1){
+		for(var j = 0; j < 6; j += 1){
+			if(board[i][j] === -1){
+				return [i, j]
+			}
+		}
+	}
+	return false
+}
+
 function checkBoard(board){
 	maxNum = 3; // maximum number of each number to be in each row/col
 	tooMany = (x) => x>maxNum;
@@ -128,7 +143,19 @@ function checkBoard(board){
 		}
 	}
 	// Make sure every row and colomn is unique
-
+	getCol = (myArray, n) => myArray.map(function(x){ return x[n] });
+	for(var i = 0; i < 6; i += 1){
+		for(var j = i; j < 6; j += 1){
+			if(i != j){
+				if(arraysEqual(board[i], board[j])){
+					return false
+				}
+				if( arraysEqual( getCol(board, i), getCol(board, j) ) ){
+					return false
+				}
+			}
+		}
+	}
 
 	return true
 }
