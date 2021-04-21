@@ -1,5 +1,4 @@
 
-
 var slider = document.getElementById("myRange");
 var output = document.getElementById("delayOutput");
 output.innerHTML = `Delay: ${slider.value}ms`; // Display the default slider value
@@ -10,12 +9,12 @@ slider.oninput = function() {
 }
 
 function toggleGridSquare(event){
-	innerText = this.childNodes[0];
-	if(innerText.innerHTML == "0"){
-		innerText.innerHTML = "1";
+	var thisGridSquare = this.childNodes[0];
+	if(thisGridSquare.innerHTML == "0"){
+		thisGridSquare.innerHTML = "1";
 	}
 	else{
-		innerText.innerHTML = "0";
+		thisGridSquare.innerHTML = "0";
 	}
 }
 
@@ -36,14 +35,29 @@ function createGrid(){
 	}
 }
 
+
 function getGrid(){
 	/*
 	Gets the numbers from the grid as a 2d array
 	Reads black (Shown as underscores) as -1
 	*/
-	container = document.getElementById("gridContainer");
-	boxes = conatiner.childNodes;
-	
+	var grid = []
+	var container = document.getElementById("gridContainer");
+	var boxes = container.childNodes;
+	for(var i = 0; i < boxes.length; i += 1){
+		if(i%6 == 0){
+			grid.push([])
+		}
+		grid[grid.length-1].push(boxes[i].innerText)
+	}
+	return grid
+}
+
+function solve(){
+	/*
+	Solves the binary puzzle
+	*/
+	console.log(getGrid());
 }
 
 createGrid()
