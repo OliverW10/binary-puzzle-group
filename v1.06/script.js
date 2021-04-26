@@ -10,10 +10,14 @@ slider.oninput = function() {
 
 function toggleGridSquare(event){
 	var thisGridSquare = this.childNodes[0];
+	this.style["backgroundColor"] = "rgb(25, 50, 100)";
 	if(thisGridSquare.innerHTML == "0"){
 		thisGridSquare.innerHTML = "1";
 	}
-	else{
+	else if(thisGridSquare.innerHTML == "1"){
+		thisGridSquare.innerHTML = "_";
+	}
+	else if(thisGridSquare.innerHTML == "_"){
 		thisGridSquare.innerHTML = "0";
 	}
 }
@@ -58,6 +62,17 @@ function getGrid(){
 	return grid
 }
 
+function setGrid(grid){
+	/*
+	Sets the grid to the 2d array grid
+	*/
+	var container = document.getElementById("gridContainer");
+	var boxes = container.childNodes;
+	for(var i = 0; i < boxes.length; i += 1){
+		boxes[i].innerText = grid[ Math.floor(i/6) ][ i%6 ]
+	}
+}
+
 function arraysEqual(a, b) {
 	if (a === b) return true;
 	if (a == null || b == null) return false;
@@ -93,8 +108,8 @@ function checkBoard(board){
 	maxNum = 3; // maximum number of each number to be in each row/col
 	tooMany = (x) => x>maxNum;
 
-	rowCounts = [0, 0]
-	colCounts = [0, 0]
+	rowCounts = [0, 0];
+	colCounts = [0, 0];
 
 	// Counts how many 1's and 0's are in each row and coloumn of the board
 	// Fails if there are more than maxNum of either in any row or col
@@ -111,8 +126,8 @@ function checkBoard(board){
 		if(rowCounts.some(tooMany) || colCounts.some(tooMany)){
 			return false
 		}
-		rowCounts = [0, 0]
-		colCounts = [0, 0]
+		rowCounts = [0, 0];
+		colCounts = [0, 0];
 	}
 
 	isThree = (arr) => arraysEqual(arr, [0, 0, 0]) || arraysEqual(arr, [1, 1, 1]);
@@ -136,25 +151,25 @@ function checkBoard(board){
 		return true
 	}
 	// Make sure every row and colomn is unique
-	// getCol = (myArray, n) => myArray.map(function(x){ return x[n] });
-	// for(var i = 0; i < 6; i += 1){
-	// 	for(var j = i; j < 6; j += 1){
-	// 		if(i != j){
-	// 			if(arraysEqual(board[i], board[j])){
-	// 				return false
-	// 			}
-	// 			if( arraysEqual( getCol(board, i), getCol(board, j) ) ){
-	// 				return false
-	// 			}
-	// 		}
-	// 	}
-	// }
+	getCol = (myArray, n) => myArray.map(function(x){ return x[n] });
+	for(var i = 0; i < 6; i += 1){
+		for(var j = i; j < 6; j += 1){
+			if(i != j){
+				if(arraysEqual(board[i], board[j])){
+					return false
+				}
+				if( arraysEqual( getCol(board, i), getCol(board, j) ) ){
+					return false
+				}
+			}
+		}
+	}
 
 	return true
 }
 
 
-function sleep (time) {
+async function sleep (time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
@@ -163,33 +178,40 @@ sleep(500).then(() => {
     // Do something after the sleep!
 });
 
-function branch(board, callback, delay){
-	callback(board);
-	pos = findEmpty(board);
+function branch(board, callback){
+	await callback(board);
+	var pos = findEmpty(board);
 	// checks if we filled every square, meaning we found a solution
-	if(pos == false && checkBoard(board) == true){
-		return [true, board]
+	if(pos == false){
+		if(checkBoard(board) == true){
+			return [true, board]
+		}else{
+			return [false, []]
+		}
 	}
 
 	for(test in [0, 1]){
+		var pos = findEmpty(board);
 		// tests both 1 and 0 for the next square
 		board[pos[0]][pos[1]] = test;
 		// if the board is valid with the change
 		if(checkBoard(board) === true){
 			// continue branching down 
-			sol = branch(board, callback, delay);
+			sol = branch(board, callback);
 			if(sol[0] === true){ // found a solution below and is going back up
 				return sol;
 			}
 		}
+		// this branch is invalid, revert changes
+		board[pos[0]][pos[1]] = -1
 	}
-	// this branch is invalid, back out and revert changes
-	board[pos[0]][pos[1]] = -1
+	// both of these branches were bad, go back
 	return [false, []] 
 }
 
 function printBoard(board){
-	console.log(board);
+	await sleep(100);
+	// console.log(board);
 }
 
 function solve(){
@@ -198,8 +220,10 @@ function solve(){
 	*/
 	startGrid = getGrid();
 	console.log(startGrid)
-	console.log(branch(startGrid, printBoard))
-	console.log("done")
+	var solvedGrid = branch(startGrid, printBoard);
+	console.log(solvedGrid);
+	console.log("done");
+	setGrid(solvedGrid[1]);
 }
 
 createGrid()
