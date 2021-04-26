@@ -183,7 +183,6 @@ function sleep(millis)
 }
 
 function branch(board, callback){
-	callback(board);
 	var pos = findEmpty(board);
 	// checks if we filled every square, meaning we found a solution
 	if(pos == false){
@@ -198,6 +197,7 @@ function branch(board, callback){
 		var pos = findEmpty(board);
 		// tests both 1 and 0 for the next square
 		board[pos[0]][pos[1]] = test;
+		callback(board);
 		// if the board is valid with the change
 		if(checkBoard(board) === true){
 			// continue branching down 
