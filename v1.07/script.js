@@ -10,12 +10,13 @@ slider.oninput = function() {
 
 function toggleGridSquare(event){
 	var thisGridSquare = this.childNodes[0];
-	this.style["backgroundColor"] = "rgb(25, 50, 100)";
+    this.className = "gridBox noselect gridBoxSelected";
 	if(thisGridSquare.innerHTML == "0"){
 		thisGridSquare.innerHTML = "1";
 	}
 	else if(thisGridSquare.innerHTML == "1"){
-		thisGridSquare.innerHTML = "_";
+        thisGridSquare.innerHTML = "_";
+        this.className = "gridBox noselect";
 	}
 	else if(thisGridSquare.innerHTML == "_"){
 		thisGridSquare.innerHTML = "0";
@@ -78,6 +79,7 @@ function setGrid(grid){
 	}
 }
 
+// https://stackoverflow.com/questions/3115982/how-to-check-if-two-arrays-are-equal-with-javascript
 function arraysEqual(a, b) {
 	if (a === b) return true;
 	if (a == null || b == null) return false;
@@ -173,15 +175,6 @@ function checkBoard(board){
 	return true
 }
 
-
-function sleep(millis)
-{
-    var date = new Date();
-    var curDate = null;
-    do { curDate = new Date(); }
-    while(curDate-date < millis);
-}
-
 function branch(board, callback){
 	var pos = findEmpty(board);
 	// checks if we filled every square, meaning we found a solution
@@ -224,17 +217,10 @@ function solve(){
 	Solves the binary puzzle
 	*/
 	startGrid = getGrid();
-	console.log(startGrid)
 	var solvedGrid = branch(startGrid, printBoard);
 	console.log(solvedGrid);
 	console.log("done");
-	// setGrid(solvedGrid[1]);
 }
 
 createGrid()
 
-// blocking
-function sleepFor( sleepDuration ){
-	var now = new Date().getTime();
-	while(new Date().getTime() < now + sleepDuration){ /* do nothing */ } 
-}

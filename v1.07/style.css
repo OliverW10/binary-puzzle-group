@@ -56,3 +56,6 @@ h1{
 #solveButton:hover{
 	background-color: rgb(75, 100, 200);
 }
+.gridBoxSelected{
+    background-color: rgb(25, 50, 100);
+}
